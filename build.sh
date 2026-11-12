@@ -1,16 +1,18 @@
 #!/bin/sh
-# Builds build/ClaudeBar.app (release, ad-hoc signed).
+# Builds build/ClaudeBar.app (release, arm64, ad-hoc signed).
+#
+# Runs xcodebuild directly with a single architecture: Flutter 3.29's own
+# `flutter build macos` fails its universal-binary check with Xcode 27's lipo.
 set -eu
 cd "$(dirname "$0")"
 
-swift build -c release
-BIN="$(swift build -c release --show-bin-path)/ClaudeBar"
+flutter pub get
+flutter build macos --release --config-only
+(cd macos && xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Release \
+    -derivedDataPath ../build/macos ARCHS=arm64 ONLY_ACTIVE_ARCH=YES build -quiet)
 
 APP=build/ClaudeBar.app
 rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS"
-cp "$BIN" "$APP/Contents/MacOS/ClaudeBar"
-cp Resources/Info.plist "$APP/Contents/Info.plist"
-codesign --force --sign - "$APP"
+cp -R build/macos/Build/Products/Release/ClaudeBar.app "$APP"
 
 echo "Built $APP"

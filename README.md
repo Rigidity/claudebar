@@ -6,8 +6,8 @@ The pace is linear. If 40% of the week has passed and you've used 30%, you're **
 
 ## Requirements
 
-- macOS 13+
-- Swift toolchain (the Command Line Tools are enough; you don't need Xcode)
+- macOS 13+, Apple silicon
+- Flutter (with macOS desktop enabled), Xcode and CocoaPods
 - Logged in to Claude Code (`claude`). ClaudeBar reads the same OAuth token from the `Claude Code-credentials` keychain item.
 
 ## Build & run
@@ -19,7 +19,16 @@ open build/ClaudeBar.app
 
 To start it at login, add `build/ClaudeBar.app` (or a copy in `/Applications`) under System Settings → General → Login Items.
 
+## Test
+
+```sh
+flutter test
+```
+
 ## Notes
+
+- `build.sh` calls `xcodebuild` directly with `ARCHS=arm64` because `flutter build macos` (3.29) fails its universal-binary check under Xcode 27's `lipo`. On a newer Flutter, `flutter build macos` should work.
+- The app is not sandboxed: it needs to run `/usr/bin/security` to read Claude Code's keychain item.
 
 - Data comes from `https://api.anthropic.com/api/oauth/usage`, the endpoint Claude Code's `/usage` uses. It's undocumented and could change.
 - It refreshes every 5 minutes, or when you click refresh. The token is read again on every refresh, so tokens refreshed by Claude Code get picked up. If it says the token expired, run `claude` once.

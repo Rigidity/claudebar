@@ -1,3 +1,9 @@
-.build/
 build/
-.swiftpm/
+.dart_tool/
+.idea/
+*.iml
+.flutter-plugins
+.flutter-plugins-dependencies
+macos/Pods/
+macos/Flutter/ephemeral/
+macos/**/xcuserdata/
