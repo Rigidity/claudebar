@@ -1,25 +1,64 @@
+<div align="center">
+
 # ClaudeBar
 
-A tiny macOS menu bar app that shows your Claude usage: the 5-hour session, the weekly limit, and the Fable weekly limit. For each one it also shows how far ahead of or behind an even pace you are.
+**Your Claude usage, one glance away in the macOS menu bar.**
 
-The pace is linear. If 40% of the week has passed and you've used 30%, you're **10% in reserve**. If you've used 50%, you're **10% in deficit**. The tick on each bar marks where an even pace would put you.
+![macOS 13+](https://img.shields.io/badge/macOS-13%2B-black?logo=apple)
+![Swift 5.9](https://img.shields.io/badge/Swift-5.9-F05138?logo=swift&logoColor=white)
+![No Xcode needed](https://img.shields.io/badge/Xcode-not%20required-lightgrey)
 
-## Requirements
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/hero-dark.png">
+  <img alt="ClaudeBar's menu bar label (S 42% · W 71%) with its usage panel open, showing session, weekly and Fable weekly bars with pace markers" src="docs/hero-light.png" width="640">
+</picture>
 
-- macOS 13+
-- Swift toolchain (the Command Line Tools are enough; you don't need Xcode)
-- Logged in to Claude Code (`claude`). ClaudeBar reads the same OAuth token from the `Claude Code-credentials` keychain item.
+</div>
 
-## Build & run
+## What it shows
+
+The menu bar shows your 5-hour **session** usage and your **weekly** usage (`S 42% · W 71%`). Click it to open the panel, which shows each limit:
+
+| Limit | Window | Notes |
+| --- | --- | --- |
+| **Session** | 5 hours | Shows "No active session" when idle |
+| **Weekly** | 7 days | Across all models |
+| **Fable weekly** | 7 days | Only appears if your plan has a Fable-specific limit |
+
+Each limit has a usage bar, a countdown to its reset, and your **pace**.
+
+## Pacing
+
+ClaudeBar compares your usage against an even burn rate across the window. The tick on each bar marks where that even pace would put you right now.
+
+- **In reserve** (green): you're under pace. If 40% of the week has passed and you've used 30%, you're **10% in reserve**.
+- **In deficit** (red): you're over pace. Used 50% at the same point? You're **10% in deficit**.
+
+The bar turns **orange** when you're over pace and **red** above 90%.
+
+## Getting started
+
+### Requirements
+
+- macOS 13 or later
+- A Swift toolchain. The Command Line Tools are enough; you don't need Xcode.
+- A logged-in Claude Code (`claude`). ClaudeBar reads the same OAuth token from the `Claude Code-credentials` keychain item.
+
+### Build & run
 
 ```sh
 ./build.sh
 open build/ClaudeBar.app
 ```
 
-To start it at login, add `build/ClaudeBar.app` (or a copy in `/Applications`) under System Settings → General → Login Items.
+> [!TIP]
+> To launch it at login, copy `build/ClaudeBar.app` to `/Applications` and add it under **System Settings → General → Login Items**.
 
-## Notes
+## How it works
 
-- Data comes from `https://api.anthropic.com/api/oauth/usage`, the endpoint Claude Code's `/usage` uses. It's undocumented and could change.
-- It refreshes every 5 minutes, or when you click refresh. The token is read again on every refresh, so tokens refreshed by Claude Code get picked up. If it says the token expired, run `claude` once.
+- Usage comes from `https://api.anthropic.com/api/oauth/usage`, the same endpoint Claude Code's `/usage` command calls.
+- It refreshes every 5 minutes, or when you click ↻. The token is read again on every refresh, so tokens Claude Code refreshes get picked up.
+- If it says your token expired, run `claude` once to refresh it.
+
+> [!WARNING]
+> The usage endpoint is undocumented and may change without notice.
