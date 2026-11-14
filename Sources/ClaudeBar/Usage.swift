@@ -20,6 +20,33 @@ struct LimitWindow: Identifiable {
     func paceDelta(at now: Date = Date()) -> Double? {
         expectedPercent(at: now).map { $0 - usedPercent }
     }
+
+    /// Drives the colour of the bar and pace text.
+    func paceLevel(at now: Date = Date()) -> PaceLevel {
+        if usedPercent >= 90 { return .critical }
+        if let delta = paceDelta(at: now), delta < 0 { return .over }
+        return .under
+    }
+
+    /// When usage reaches 100% if it keeps growing at the average rate so far.
+    /// nil when that wouldn't happen before the window resets, or when too little of the window
+    /// has passed for the rate to mean much (a burst right after a reset would project wildly).
+    func projectedLimitDate(at now: Date = Date()) -> Date? {
+        guard let resetsAt, usedPercent > 0, usedPercent < 100 else { return nil }
+        let elapsed = duration - resetsAt.timeIntervalSince(now)
+        guard elapsed >= duration * 0.1 else { return nil }
+        let hit = now.addingTimeInterval((100 - usedPercent) / usedPercent * elapsed)
+        return hit < resetsAt ? hit : nil
+    }
+}
+
+enum PaceLevel {
+    /// At or under an even burn rate.
+    case under
+    /// Ahead of an even burn rate.
+    case over
+    /// 90% or more of the limit used.
+    case critical
 }
 
 struct UsageSnapshot {
