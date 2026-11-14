@@ -10,7 +10,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/hero-dark.png">
-  <img alt="ClaudeBar's menu bar label (S 42% · W 71%) with its usage panel open, showing session, weekly and Fable weekly bars with pace markers" src="docs/hero-light.png" width="640">
+  <img alt="ClaudeBar's menu bar label (pace-coloured session and weekly mini bars, 71%) with its usage panel open, showing session, weekly and Fable weekly bars with pace markers, a hatched weekly overage and a projection line" src="docs/hero-light.png" width="640">
 </picture>
 
 </div>
