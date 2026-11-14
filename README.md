@@ -17,7 +17,7 @@
 
 ## What it shows
 
-The menu bar shows your 5-hour **session** usage and your **weekly** usage (`S 42% · W 71%`). Click it to open the panel, which shows each limit:
+The menu bar shows two mini bars, your 5-hour **session** usage on top and your **weekly** usage below, followed by your weekly percentage. Each bar is coloured by pace and has a tick where an even pace would put you. Click it to open the panel, which shows each limit:
 
 | Limit | Window | Notes |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ ClaudeBar compares your usage against an even burn rate across the window. The t
 - **In reserve** (green): you're under pace. If 40% of the week has passed and you've used 30%, you're **10% in reserve**.
 - **In deficit** (red): you're over pace. Used 50% at the same point? You're **10% in deficit**.
 
-The bar turns **orange** when you're over pace and **red** above 90%.
+Bars and pace text are **green** under pace, **orange** over pace and **red** above 90%. Usage past the tick is hatched, so you can see how far over you are. When you're over pace, the panel also says when you'd hit 100% at your current rate. That line only appears once 10% of the window has passed. Hover a reset countdown to see the exact reset time.
 
 ## Getting started
 
@@ -52,7 +52,7 @@ open build/ClaudeBar.app
 ```
 
 > [!TIP]
-> To launch it at login, copy `build/ClaudeBar.app` to `/Applications` and add it under **System Settings → General → Login Items**.
+> To launch it at login, copy `build/ClaudeBar.app` to `/Applications`, open it from there, and turn on **Launch at Login** in the panel's ⋯ menu.
 
 ## How it works
 
